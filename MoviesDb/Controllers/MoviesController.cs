@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MoviesDb.Services;
 
@@ -18,57 +16,74 @@ namespace MoviesDb.Controllers
             this._service = service;
         }
 
-        // GET api/values
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         [HttpGet]
         [Route("{title}/find")]
-        public ActionResult GetBy(string title)
-        {
-            if(string.IsNullOrWhiteSpace(title))
-            {
-                return BadRequest();
-            }
-
-            var movie = this._service.FindByParameters(title);
-            if(movie == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(movie);
-        }
-
-        [HttpGet]
-        [Route("{title}/{year}/find")]
-        public ActionResult GetByA(string title, string year)
+        public ActionResult FindByTitle(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
                 return BadRequest();
             }
 
-            if(string.IsNullOrWhiteSpace(year))
+            try
+            {
+                var movie = this._service.FindByParameters(title);
+                if (movie == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(movie);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                //TODO: LOGG
+                throw new Exception("Internal Server Error");
+            }
+        }
+
+        [HttpGet]
+        [Route("{title}/{year}/find")]
+        public ActionResult FindByTitleAndYear(string title, string year)
+        {
+            if (string.IsNullOrWhiteSpace(title))
             {
                 return BadRequest();
             }
 
-            var movie = this._service.FindByParameters(title, year);
-            if (movie == null)
+            if (string.IsNullOrWhiteSpace(year))
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            return Ok(movie);
+            try
+            {
+                var movie = this._service.FindByParameters(title, year);
+                if (movie == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(movie);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                //TODO: LOGG
+                throw new Exception("Internal Server Error");
+            }
         }
 
         [HttpGet]
         [Route("{title}/{year}/{genre}/find")]
-        public ActionResult GetByA(string title, string year, string genre)
+        public ActionResult FindByTitleYearAndGenre(string title, string year, string genre)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
@@ -85,38 +100,25 @@ namespace MoviesDb.Controllers
                 return BadRequest();
             }
 
-            var movie = this._service.FindByParameters(title, year, genre);
-            if (movie == null)
+            try
             {
-                return NotFound();
+                var movie = this._service.FindByParameters(title, year, genre);
+                if (movie == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(movie);
             }
-
-            return Ok(movie);
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                //TODO: LOGG
+                throw new Exception("Internal Server Error");
+            }
         }
     }
 }

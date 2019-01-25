@@ -1,5 +1,6 @@
 ﻿using MoviesDb.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MoviesDb.Services
@@ -13,23 +14,31 @@ namespace MoviesDb.Services
             this._context = context;
         }
 
-        public IMovie FindByParameters(string title, string yearOfRelease = null, string genre = null)
+        public IMovie FindByParameters(string title = null, string yearOfRelease = null, string genre = null)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
                 return null;
             }
 
-            string trimmedTitle = title.Trim();
+            IQueryable<IMovie> movies = null;
 
-            var movies = this._context.Movies.Where(x => x.Title.StartsWith(trimmedTitle, StringComparison.InvariantCultureIgnoreCase));
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                string trimmedTitle = title.Trim();
+                movies = this._context.Movies.Where(x => x.Title.StartsWith(trimmedTitle, StringComparison.InvariantCultureIgnoreCase));
+            }
 
             if (!string.IsNullOrWhiteSpace(yearOfRelease))
             {
                 string trimmedYear = yearOfRelease.Trim();
 
                 int releaseYear = 0;
-                int.TryParse(trimmedYear, out releaseYear);
+                bool isReleaseYearParsed = int.TryParse(trimmedYear, out releaseYear);
+                if(!isReleaseYearParsed)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
 
                 movies = movies.Where(x => x.ReleaseAt.Year == releaseYear);
             }
@@ -38,6 +47,11 @@ namespace MoviesDb.Services
             {
                 string trimmedGenre = genre.Trim();
                 movies = movies.Where(x => x.Genres.Any(y => y.Name.Equals(trimmedGenre, StringComparison.InvariantCultureIgnoreCase)));
+            }
+
+            if(movies == null)
+            {
+                throw new ArgumentOutOfRangeException();
             }
 
             return movies.FirstOrDefault();
