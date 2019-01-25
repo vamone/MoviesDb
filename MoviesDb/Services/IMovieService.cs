@@ -8,5 +8,7 @@ namespace MoviesDb.Services
         IMovie FindByParameters(string title, string yearOfRelease = null, string genre = null);
 
         ICollection<IMovie> GetTopMovies(int itemsCount, string userId = null);
+
+        IMovie AddOrUpdateMovieRaiting(int id, int rating, string userId);
     }
 }

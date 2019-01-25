@@ -125,7 +125,7 @@ namespace MoviesDb.Controllers
         [Route("{itemsCount}/top")]
         public ActionResult FindTopFiveMovies(int itemsCount)
         {
-            if(itemsCount < 0)
+            if (itemsCount < 0)
             {
                 return BadRequest();
             }
@@ -133,12 +133,12 @@ namespace MoviesDb.Controllers
             try
             {
                 var movies = this._service.GetTopMovies(itemsCount);
-                if(movies == null)
+                if (movies == null)
                 {
                     return NotFound();
                 }
 
-                if(!movies.Any())
+                if (!movies.Any())
                 {
                     return NotFound();
                 }
@@ -165,7 +165,7 @@ namespace MoviesDb.Controllers
                 return BadRequest();
             }
 
-            if(string.IsNullOrWhiteSpace(userId))
+            if (string.IsNullOrWhiteSpace(userId))
             {
                 return BadRequest();
             }
@@ -184,6 +184,51 @@ namespace MoviesDb.Controllers
                 }
 
                 return Ok(movies);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                //TODO: LOGG
+                throw new Exception("Internal Server Error");
+            }
+        }
+
+        [HttpPost]
+        [Route("{id}/{raiting}/{userId}")]
+        public ActionResult Post(int id, int rating, string userId)
+        {
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
+
+            if (rating < 0)
+            {
+                return BadRequest();
+            }
+
+            if(rating > 10)
+            {
+                return BadRequest();
+            }
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var movie = this._service.AddOrUpdateMovieRaiting(id, rating, userId);
+                if(movie == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(movie);
             }
             catch (ArgumentOutOfRangeException)
             {

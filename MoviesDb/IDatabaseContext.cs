@@ -10,5 +10,7 @@ namespace MoviesDb
         DbSet<IGenre> Genres { get; set; }
 
         DbSet<IMovieRatingXhref> MovieRatingXhrefs { get; set; }
+
+        void SaveChanges();
     }
 }
