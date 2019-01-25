@@ -1,8 +1,6 @@
 ﻿using MoviesDb.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MoviesDb.Services
 {
@@ -17,14 +15,32 @@ namespace MoviesDb.Services
 
         public IMovie FindByParameters(string title, string yearOfRelease = null, string genre = null)
         {
-            if(string.IsNullOrWhiteSpace(title))
+            if (string.IsNullOrWhiteSpace(title))
             {
                 return null;
             }
 
             string trimmedTitle = title.Trim();
 
-            return this._context.Movies.FirstOrDefault(x => x.Title.StartsWith(trimmedTitle, StringComparison.InvariantCultureIgnoreCase));
+            var movies = this._context.Movies.Where(x => x.Title.StartsWith(trimmedTitle, StringComparison.InvariantCultureIgnoreCase));
+
+            if (!string.IsNullOrWhiteSpace(yearOfRelease))
+            {
+                string trimmedYear = yearOfRelease.Trim();
+
+                int releaseYear = 0;
+                int.TryParse(trimmedYear, out releaseYear);
+
+                movies = movies.Where(x => x.ReleaseAt.Year == releaseYear);
+            }
+
+            if (!string.IsNullOrWhiteSpace(genre))
+            {
+                string trimmedGenre = genre.Trim();
+                movies = movies.Where(x => x.Genres.Any(y => y.Name.Equals(trimmedGenre, StringComparison.InvariantCultureIgnoreCase)));
+            }
+
+            return movies.FirstOrDefault();
         }
     }
 }
