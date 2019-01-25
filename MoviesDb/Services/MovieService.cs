@@ -81,7 +81,7 @@ namespace MoviesDb.Services
                 movies = movies.Where(x => x.MovieRatingXhrefs.Any(y => y.UserId == userUniqId));
             }
 
-            movies = movies.OrderByDescending(x => x.MovieRatingXhrefs.Average(y => y.Raiting)).ThenBy(x => x.Title);
+            movies = movies.Where(x => x.MovieRatingXhrefs.Any()).OrderByDescending(x => x.MovieRatingXhrefs.Average(y => y.Raiting)).ThenBy(x => x.Title);
 
             return movies.Take(itemsCount).ToList();
         }
