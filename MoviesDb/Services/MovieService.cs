@@ -14,6 +14,29 @@ namespace MoviesDb.Services
             this._context = context;
         }
 
+        public IMovie AddOrUpdateMovieRaiting(int id, int rating, string userId)
+        {
+            Guid userUniqId = new Guid(userId);
+
+            bool isUserIdValidId = !string.IsNullOrWhiteSpace(userId) && userUniqId != Guid.Empty;
+            if (!isUserIdValidId)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            var movie = this._context.Movies.SingleOrDefault(x => x.Id == id);
+            if (movie == null)
+            {
+                return null;
+            }
+
+            movie.MovieRatingXhrefs.Add(new MovieRatingXhref { MovieId = movie.Id, Raiting = rating, UserId = userUniqId });
+
+            this._context.SaveChanges();
+
+            return movie;
+        }
+
         public IMovie FindByParameters(string title = null, string yearOfRelease = null, string genre = null)
         {
             if (string.IsNullOrWhiteSpace(title))
@@ -84,29 +107,6 @@ namespace MoviesDb.Services
             movies = movies.Where(x => x.MovieRatingXhrefs.Any()).OrderByDescending(x => x.MovieRatingXhrefs.Average(y => y.Raiting)).ThenBy(x => x.Title);
 
             return movies.Take(itemsCount).ToList();
-        }
-
-        public IMovie AddOrUpdateMovieRaiting(int id, int rating, string userId)
-        {
-            Guid userUniqId = new Guid(userId);
-
-            bool isUserIdValidId = !string.IsNullOrWhiteSpace(userId) && userUniqId != Guid.Empty;
-            if (!isUserIdValidId)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-
-            var movie = this._context.Movies.SingleOrDefault(x => x.Id == id);
-            if (movie == null)
-            {
-                return null;
-            }
-
-            movie.MovieRatingXhrefs.Add(new MovieRatingXhref { MovieId = movie.Id, Raiting = rating, UserId = userUniqId });
-
-            this._context.SaveChanges();
-
-            return movie;
         }
     }
 }
