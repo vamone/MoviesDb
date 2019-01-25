@@ -7,8 +7,8 @@ namespace MoviesDb.Models
     {
         public Movie()
         {
-            this.Genres = this.Genres ?? new List<Genre>();
-            this.MovieRatingXhrefs = this.MovieRatingXhrefs ?? new List<MovieRatingXhref>();
+            this.Genres = this.Genres ?? new List<IGenre>();
+            this.MovieRatingXhrefs = this.MovieRatingXhrefs ?? new List<IMovieRatingXhref>();
         }
 
         public int Id { get; set; }
@@ -17,8 +17,8 @@ namespace MoviesDb.Models
 
         public DateTime ReleaseAt { get; set; }
 
-        public virtual ICollection<Genre> Genres { get; set; }
+        public virtual ICollection<IGenre> Genres { get; set; }
 
-        public virtual ICollection<MovieRatingXhref> MovieRatingXhrefs { get; set; }
+        public virtual ICollection<IMovieRatingXhref> MovieRatingXhrefs { get; set; }
     }
 }

@@ -12,8 +12,8 @@ namespace MoviesDb.Models
 
         DateTime ReleaseAt { get; set; }
 
-        ICollection<Genre> Genres { get; set; }
+        ICollection<IGenre> Genres { get; set; }
 
-        ICollection<MovieRatingXhref> MovieRatingXhrefs { get; set; }
+        ICollection<IMovieRatingXhref> MovieRatingXhrefs { get; set; }
     }
 }

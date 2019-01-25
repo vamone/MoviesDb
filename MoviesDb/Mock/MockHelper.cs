@@ -65,8 +65,57 @@ namespace MoviesDb.Mock
             yield return new Movie
             {
                 Id = 1,
-                Title = "Santa",
+                Title = "The Christmas Chronicles",
+                ReleaseAt = DateTime.UtcNow.AddYears(-1),
+                Genres = GetGenres().ToList()
+            };
+
+            yield return new Movie
+            {
+                Id = 2,
+                Title = "Bumblebee",
+                ReleaseAt = DateTime.UtcNow.AddYears(-2),
+                Genres = GetGenres().ToList(),
+                MovieRatingXhrefs = GetMovieRatingXhrefsSpecificMovie().ToList()
+            };
+
+            yield return new Movie
+            {
+                Id = 3,
+                Title = "Papillon",
+                ReleaseAt = DateTime.UtcNow.AddYears(-3),
+                Genres = GetGenres().ToList()
+            };
+
+            yield return new Movie
+            {
+                Id = 4,
+                Title = "The Girl in the Spider's Web",
                 ReleaseAt = DateTime.UtcNow.AddYears(-1)
+            };
+
+            yield return new Movie
+            {
+                Id = 4,
+                Title = "The Girl in the Spider's Web 2",
+                ReleaseAt = DateTime.UtcNow.AddYears(-1),
+                Genres = GetGenres().ToList(),
+                MovieRatingXhrefs = GetMovieRatingXhrefsSpecificMovie().ToList()
+            };
+
+            yield return new Movie
+            {
+                Id = 5,
+                Title = "A Simple Favor",
+                ReleaseAt = DateTime.UtcNow.AddYears(-2)
+            };
+
+            yield return new Movie
+            {
+                Id = 5,
+                Title = "Sicario 2: Day of the Soldado",
+                ReleaseAt = DateTime.UtcNow.AddYears(-3),
+                Genres = GetGenres().ToList()
             };
         }
 
@@ -85,8 +134,43 @@ namespace MoviesDb.Mock
             {
                 Id = 1,
                 MovieId = 1,
+                Raiting = (decimal)8.9,
+                UserId = new Guid("fdd0cb9a-1591-4490-b5ff-72ed471b6985")
+            };
+
+            yield return new MovieRatingXhref
+            {
+                Id = 2,
+                MovieId = 2,
                 Raiting = 5,
-                UserId = Guid.NewGuid()
+                UserId = new Guid("30cab31b-4001-49b4-88c7-af466343a022")
+            };
+
+            yield return new MovieRatingXhref
+            {
+                Id = 3,
+                MovieId = 3,
+                Raiting = 6,
+                UserId = new Guid("30cab31b-4001-49b4-88c7-af466343a022")
+            };
+        }
+
+        private static IEnumerable<IMovieRatingXhref> GetMovieRatingXhrefsSpecificMovie()
+        {
+            yield return new MovieRatingXhref
+            {
+                Id = 1,
+                MovieId = 1,
+                Raiting = (decimal)8,
+                UserId = new Guid("30cab31b-4001-49b4-88c7-af466343a022")
+            };
+
+            yield return new MovieRatingXhref
+            {
+                Id = 2,
+                MovieId = 3,
+                Raiting = (decimal)8,
+                UserId = new Guid("30cab31b-4001-49b4-88c7-af466343a022")
             };
         }
     }

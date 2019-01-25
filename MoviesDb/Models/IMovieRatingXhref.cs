@@ -8,9 +8,7 @@ namespace MoviesDb.Models
 
         int MovieId { get; set; }
 
-        Movie Movie { get; set; }
-
-        int Raiting { get; set; }
+        decimal Raiting { get; set; }
 
         Guid UserId { get; set; }
     }

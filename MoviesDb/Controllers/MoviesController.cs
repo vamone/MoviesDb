@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using MoviesDb.Services;
 
@@ -109,6 +109,81 @@ namespace MoviesDb.Controllers
                 }
 
                 return Ok(movie);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                //TODO: LOGG
+                throw new Exception("Internal Server Error");
+            }
+        }
+
+        [HttpGet]
+        [Route("{itemsCount}/top")]
+        public ActionResult FindTopFiveMovies(int itemsCount)
+        {
+            if(itemsCount < 0)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var movies = this._service.GetTopMovies(itemsCount);
+                if(movies == null)
+                {
+                    return NotFound();
+                }
+
+                if(!movies.Any())
+                {
+                    return NotFound();
+                }
+
+                return Ok(movies);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                //TODO: LOGG
+                throw new Exception("Internal Server Error");
+            }
+        }
+
+        [HttpGet]
+        [Route("{itemsCount}/{userId}/top")]
+        public ActionResult FindTopFiveMoviesByUserId(int itemsCount, string userId)
+        {
+            if (itemsCount < 0)
+            {
+                return BadRequest();
+            }
+
+            if(string.IsNullOrWhiteSpace(userId))
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var movies = this._service.GetTopMovies(itemsCount, userId);
+                if (movies == null)
+                {
+                    return NotFound();
+                }
+
+                if (!movies.Any())
+                {
+                    return NotFound();
+                }
+
+                return Ok(movies);
             }
             catch (ArgumentOutOfRangeException)
             {

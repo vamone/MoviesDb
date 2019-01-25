@@ -7,7 +7,5 @@ namespace MoviesDb.Models
         int Id { get; set; }
 
         string Name { get; set; }
-
-        ICollection<Movie> Movies { get; set; }
     }
 }
