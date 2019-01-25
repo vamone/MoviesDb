@@ -2,7 +2,7 @@
 
 namespace MoviesDb.Models
 {
-    public class MovieRatingXhref
+    public class MovieRatingXhref : IMovieRatingXhref
     {
         public int Id { get; set; }
 

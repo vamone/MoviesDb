@@ -2,7 +2,7 @@
 
 namespace MoviesDb.Models
 {
-    public class Genre
+    public class Genre : IGenre
     {
         public Genre()
         {

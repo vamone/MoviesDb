@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MoviesDb.Models
 {
-    public class Movie
+    public class Movie : IMovie
     {
         public Movie()
         {
