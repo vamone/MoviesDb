@@ -30,7 +30,15 @@ namespace MoviesDb.Services
                 return null;
             }
 
-            movie.MovieRatingXhrefs.Add(new MovieRatingXhref { MovieId = movie.Id, Raiting = rating, UserId = userUniqId });
+            var movieRating = movie.MovieRatingXhrefs.SingleOrDefault(x => x.UserId == userUniqId);
+            if (movieRating == null)
+            {
+                movie.MovieRatingXhrefs.Add(new MovieRatingXhref { MovieId = movie.Id, Raiting = rating, UserId = userUniqId });
+            }
+            else
+            {
+                movieRating.Raiting = rating;
+            }
 
             this._context.SaveChanges();
 
